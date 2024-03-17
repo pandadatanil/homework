@@ -1,5 +1,5 @@
 # homework
-#Link of data source: https://data.cityofnewyork.us/Social-Services/Benefits-and-Programs-API-Historical-/2j8u-wtju/about_data
-#About data: it comes from NYC Open data provided by Mayor’s Office for Economic Opportunity
-#Data dictionary: https://data.cityofnewyork.us/api/views/2j8u-wtju/files/258f1a61-73e1-4e3e-98f1-681fd54f70f5?download=true&filename=Benefits%20and%20Programs%20API_Data_Dictionary.xlsx
+#Link of data source: https://data.cityofnewyork.us/Social-Services/311-Service-Requests-from-2010-to-Present/erm2-nwe9/about_data
+#About data: it comes from NYC Open data provided by Office of Technology and Innovation (OTI)
+#Data dictionary: https://data.cityofnewyork.us/api/views/erm2-nwe9/files/7bdd2c6b-ad79-438e-9ae6-2ce75b471063?download=true&filename=311_ServiceRequest_2010-Present_DataDictionary_Updated_2023.xlsx
 #

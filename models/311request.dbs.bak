@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="311_dw_lgl" id="LogicalDesign-d8c" database="LogicalDesign" >
+	<schema name="INSTANCE" catalogname="311_dw_lgl" >
+		<table name="dim_date" prior="Entity" >
+			<column name="date_id" type="INT" jt="4" mandatory="y" />
+			<column name="year" type="INT" jt="4" />
+			<column name="monthNumber" type="INT" jt="4" />
+			<column name="quarter" type="DATE" jt="91" />
+			<column name="dayNumber" type="DATE" jt="91" />
+			<column name="dayName" type="VARCHAR" length="100" jt="12" />
+			<column name="monthName" type="VARCHAR" length="100" jt="12" />
+			<column name="hournumber" prior="weekoftheyear" type="INT" jt="4" />
+			<index name="pk_dim_date" unique="PRIMARY_KEY" >
+				<column name="date_id" />
+			</index>
+		</table>
+		<table name="dim_location" prior="Entity" >
+			<column name="location_id" type="INT" jt="4" mandatory="y" />
+			<column name="borough" prior="Borough" type="VARCHAR" length="255" jt="12" />
+			<column name="latitude" type="DOUBLE" jt="8" />
+			<column name="longitude" type="DOUBLE" jt="8" />
+			<index name="pk_dim_location" unique="PRIMARY_KEY" >
+				<column name="location_id" />
+			</index>
+		</table>
+		<table name="facts_request" prior="facts_311request" >
+			<column name="factid" type="BIGINT" jt="-5" mandatory="y" />
+			<column name="complaint_type" type="CHAR" length="255" jt="1" />
+			<column name="created _date" prior="created Date" type="DATE" jt="91" />
+			<column name="closed_date" prior="closed Date" type="DATE" jt="91" />
+			<column name="location_id" type="INT" jt="4" mandatory="y" />
+			<column name="date_id" prior="data_id" type="INT" jt="4" mandatory="y" />
+			<index name="pk_facts_request" unique="PRIMARY_KEY" >
+				<column name="factid" />
+				<column name="location_id" />
+			</index>
+			<fk name="fk_facts_request_dim_location" virtual="y" to_schema="311_dw_lgl.INSTANCE" to_table="dim_location" type="Identifying" mandatory="y" cardinality="ZeroMore" range_from="0" range_to="0" >
+				<fk_column name="location_id" pk="location_id" />
+			</fk>
+			<fk name="fk_facts_request_dim_date" virtual="y" to_schema="311_dw_lgl.INSTANCE" to_table="dim_date" type="NonIdentifying" mandatory="n" cardinality="OneMore" range_from="0" range_to="0" >
+				<fk_column name="date_id" pk="date_id" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-5d6" show_relation="columns" >
+		<entity schema="311_dw_lgl.INSTANCE" name="dim_date" color="C1D8EE" x="493" y="425" />
+		<entity schema="311_dw_lgl.INSTANCE" name="dim_location" color="C1D8EE" x="527" y="221" />
+		<entity schema="311_dw_lgl.INSTANCE" name="facts_request" color="C1D8EE" x="170" y="221" />
+		<callout x="51" y="51" pointer="Round" >
+			<comment><![CDATA[This is a layout - a diagram with tools.
+- Create new entities by right-clicking the layout. 
+- Double-click entity headers to edit.
+- For a better understanding of the schema, create multiple layouts.
+- Deploy the model into the database by converting it first to the physical design.]]></comment>
+		</callout>
+	</layout>
+</project>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="311_dw_lgl" id="PostgreSQL-1aa0" database="PostgreSQL" >
+	<schema name="instance" catalogname="311_dw_lgl" >
+		<table name="dim_agency" >
+			<column name="agency_id" type="INT" jt="4" mandatory="y" />
+			<column name="agency" type="VARCHAR" length="10" jt="12" />
+			<index name="pk_dim_agency" unique="PRIMARY_KEY" >
+				<column name="agency_id" />
+			</index>
+		</table>
+		<table name="dim_channel" >
+			<column name="channel_id" type="INT" jt="4" mandatory="y" />
+			<column name="open_data_channel_type" type="VARCHAR" length="100" jt="12" />
+			<index name="pk_dim_open_data_channel_" unique="PRIMARY_KEY" >
+				<column name="channel_id" />
+			</index>
+		</table>
+		<table name="dim_complaint" >
+			<column name="complaint_id" type="INT" jt="4" mandatory="y" />
+			<column name="complaint_type" type="VARCHAR" length="255" jt="12" />
+			<index name="pk_dim_complaint" unique="PRIMARY_KEY" >
+				<column name="complaint_id" />
+			</index>
+		</table>
+		<table name="dim_date" >
+			<column name="date_id" type="INT" jt="4" mandatory="y" />
+			<column name="date_iso_format" type="DATE" jt="91" />
+			<column name="year" type="INT" jt="4" />
+			<column name="month" type="INT" jt="4" />
+			<column name="day" type="INT" jt="4" />
+			<column name="hour" type="INT" jt="4" />
+			<column name="minute" type="INT" jt="4" />
+			<index name="pk_dim_date" unique="PRIMARY_KEY" >
+				<column name="date_id" />
+			</index>
+		</table>
+		<table name="dim_location" >
+			<column name="location_id" type="INT" jt="4" mandatory="y" />
+			<column name="city" type="VARCHAR" length="100" jt="12" />
+			<column name="borough" type="VARCHAR" length="100" jt="12" />
+			<column name="street" type="VARCHAR" length="100" jt="12" />
+			<column name="zip" type="VARCHAR" length="10" jt="12" />
+			<column name="latitude" type="DOUBLE" jt="8" />
+			<column name="longitude" type="DOUBLE" jt="8" />
+			<index name="pk_dim_location" unique="PRIMARY_KEY" >
+				<column name="location_id" />
+			</index>
+		</table>
+		<table name="fact_request" >
+			<column name="factid" type="BIGINT" jt="-5" mandatory="y" />
+			<column name="created__date_id" prior="created _date_id" type="DATE" jt="91" mandatory="y" />
+			<column name="closed_date_id" type="DATE" jt="91" mandatory="y" />
+			<column name="agency_id" type="INT" jt="4" mandatory="y" />
+			<column name="complaint_id" type="INT" jt="4" mandatory="y" />
+			<column name="location_id" type="INT" jt="4" mandatory="y" />
+			<column name="channel_id" type="INT" jt="4" mandatory="y" />
+			<column name="date_diff" type="INT" jt="4" mandatory="y" />
+			<index name="pk" unique="PRIMARY_KEY" >
+				<column name="location_id" />
+				<column name="agency_id" />
+				<column name="complaint_id" />
+				<column name="channel_id" />
+				<column name="created__date_id" />
+				<column name="closed_date_id" />
+			</index>
+			<fk name="fk_facts_request_dim_location" virtual="y" to_schema="311_dw_lgl.instance" to_table="dim_location" >
+				<fk_column name="location_id" pk="location_id" />
+			</fk>
+			<fk name="fk_facts_request_dim_agency" virtual="y" to_schema="311_dw_lgl.instance" to_table="dim_agency" >
+				<fk_column name="agency_id" pk="agency_id" />
+			</fk>
+			<fk name="fk_facts_request_dim_complaint" virtual="y" to_schema="311_dw_lgl.instance" to_table="dim_complaint" >
+				<fk_column name="complaint_id" pk="complaint_id" />
+			</fk>
+			<fk name="fk_facts_request_dim_open_data_channel" virtual="y" to_schema="311_dw_lgl.instance" to_table="dim_channel" >
+				<fk_column name="channel_id" pk="channel_id" />
+			</fk>
+			<fk name="fk_fact_request_dim_date" virtual="y" to_schema="311_dw_lgl.instance" to_table="dim_date" >
+				<fk_column name="created__date_id" pk="date_id" />
+			</fk>
+			<fk name="fk_fact_request_dim_date_0" virtual="y" to_schema="311_dw_lgl.instance" to_table="dim_date" >
+				<fk_column name="closed_date_id" pk="date_id" />
+			</fk>
+		</table>
+	</schema>
+	<layout name="Default Layout" id="Layout-14ee" confirmed="y" show_relation="columns" >
+		<entity schema="311_dw_lgl.instance" name="dim_agency" color="C1D8EE" x="68" y="204" />
+		<entity schema="311_dw_lgl.instance" name="dim_channel" color="3986C1" x="459" y="408" />
+		<entity schema="311_dw_lgl.instance" name="dim_complaint" color="C1D8EE" x="51" y="323" />
+		<entity schema="311_dw_lgl.instance" name="dim_date" color="C1D8EE" x="119" y="476" />
+		<entity schema="311_dw_lgl.instance" name="dim_location" color="C1D8EE" x="561" y="187" />
+		<entity schema="311_dw_lgl.instance" name="fact_request" color="C1D8EE" x="306" y="187" />
+		<callout x="170" y="51" pointer="Round" >
+			<comment><![CDATA[This is a layout - a diagram with tools.
+- Create new entities by right-clicking the layout. 
+- Double-click entity headers to edit.
+- For a better understanding of the schema, create multiple layouts.
+- Deploy the model into the database by converting it first to the physical design.]]></comment>
+		</callout>
+		<script name="SQL_Editor" id="Editor-1991" language="SQL" >
+			<string><![CDATA[CREATE SCHEMA IF NOT EXISTS "instance";
+
+CREATE  TABLE "instance".dim_agency ( 
+	agency_id            INT  NOT NULL  ,
+	agency               VARCHAR(10)    ,
+	CONSTRAINT pk_dim_agency PRIMARY KEY ( agency_id )
+ );
+
+CREATE  TABLE "instance".dim_channel ( 
+	channel_id           INT  NOT NULL  ,
+	open_data_channel_type VARCHAR(100)    ,
+	CONSTRAINT pk_dim_open_data_channel_ PRIMARY KEY ( channel_id )
+ );
+
+CREATE  TABLE "instance".dim_complaint ( 
+	complaint_id         INT  NOT NULL  ,
+	complaint_type       VARCHAR(255)    ,
+	CONSTRAINT pk_dim_complaint PRIMARY KEY ( complaint_id )
+ );
+
+CREATE  TABLE "instance".dim_date ( 
+	date_id              INT  NOT NULL  ,
+	date_iso_format      DATE    ,
+	"year"               INT    ,
+	"month"              INT    ,
+	"day"                INT    ,
+	"hour"               INT    ,
+	"minute"             INT    ,
+	CONSTRAINT pk_dim_date PRIMARY KEY ( date_id )
+ );
+
+CREATE  TABLE "instance".dim_location ( 
+	location_id          INT  NOT NULL  ,
+	city                 VARCHAR(100)    ,
+	borough              VARCHAR(100)    ,
+	street               VARCHAR(100)    ,
+	zip                  VARCHAR(10)    ,
+	latitude             DOUBLE    ,
+	longitude            DOUBLE    ,
+	CONSTRAINT pk_dim_location PRIMARY KEY ( location_id )
+ );
+
+CREATE  TABLE "instance".fact_request ( 
+	factid               BIGINT  NOT NULL  ,
+	created__date_id     DATE  NOT NULL  ,
+	closed_date_id       DATE  NOT NULL  ,
+	agency_id            INT  NOT NULL  ,
+	complaint_id         INT  NOT NULL  ,
+	location_id          INT  NOT NULL  ,
+	channel_id           INT  NOT NULL  ,
+	date_diff            INT  NOT NULL  ,
+	CONSTRAINT pk PRIMARY KEY ( location_id, agency_id, complaint_id, channel_id, created__date_id, closed_date_id )
+ );
+]]></string>
+		</script>
+	</layout>
+</project>

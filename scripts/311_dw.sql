@@ -1,92 +1,53 @@
-CREATE SCHEMA INSTANCE;
+CREATE SCHEMA IF NOT EXISTS "request311";
 
-CREATE TABLE `311_dw_lgl`.INSTANCE.Dim_Agency ( 
-	Agency_ID int64 NOT NULL  ,
-	Agency_Acronym string  ,
-	Agency_Name string  
+CREATE  TABLE "request311".dim_agency ( 
+	agency_id            INT  NOT NULL  ,
+	agency               VARCHAR(10)    ,
+	CONSTRAINT pk_dim_agency PRIMARY KEY ( agency_id )
  );
 
-ALTER TABLE `311_dw_lgl`.INSTANCE.Dim_Agency ADD PRIMARY KEY ( Agency_ID )  NOT ENFORCED;
-
-CREATE TABLE `311_dw_lgl`.INSTANCE.Dim_Complaint ( 
-	Complaint_ID int64 NOT NULL  ,
-	Complaint_Type string  ,
-	Descriptor string  
+CREATE  TABLE "request311".dim_channel ( 
+	channel_id           INT  NOT NULL  ,
+	open_data_channel_type VARCHAR(100)    ,
+	CONSTRAINT pk_dim_open_data_channel_ PRIMARY KEY ( channel_id )
  );
 
-ALTER TABLE `311_dw_lgl`.INSTANCE.Dim_Complaint ADD PRIMARY KEY ( Complaint_ID )  NOT ENFORCED;
-
-CREATE TABLE `311_dw_lgl`.INSTANCE.Dim_Open_Data_Channel ( 
-	Open_Data_Channel_Type_ID int64 NOT NULL  ,
-	Open_Data_Channel_Type string  
+CREATE  TABLE "request311".dim_complaint ( 
+	complaint_id         INT  NOT NULL  ,
+	complaint_type       VARCHAR(255)    ,
+	CONSTRAINT pk_dim_complaint PRIMARY KEY ( complaint_id )
  );
 
-ALTER TABLE `311_dw_lgl`.INSTANCE.Dim_Open_Data_Channel ADD PRIMARY KEY ( Open_Data_Channel_Type_ID )  NOT ENFORCED;
-
-CREATE TABLE `311_dw_lgl`.INSTANCE.Dim_Vehicle ( 
-	Vehicle_ID int64 NOT NULL  ,
-	Vehicle_Type string  
+CREATE  TABLE "request311".dim_date ( 
+	date_id              INT  NOT NULL  ,
+	date_iso_format      DATE    ,
+	"year"               INT    ,
+	"month"              INT    ,
+	"day"                INT    ,
+	"hour"               INT    ,
+	"minute"             INT    ,
+	CONSTRAINT pk_dim_date PRIMARY KEY ( date_id )
  );
 
-ALTER TABLE `311_dw_lgl`.INSTANCE.Dim_Vehicle ADD PRIMARY KEY ( Vehicle_ID )  NOT ENFORCED;
-
-CREATE TABLE `311_dw_lgl`.INSTANCE.dim_date ( 
-	date_id int64 NOT NULL  ,
-	DateOriginalFormat date  ,
-	DateIsoformat date  ,
-	year int64  ,
-	monthNumber int64  ,
-	quarter date  ,
-	dayNumber date  ,
-	dayName string  ,
-	monthName string  ,
-	hournumber int64  
+CREATE  TABLE "request311".dim_location ( 
+	location_id          INT  NOT NULL  ,
+	city                 VARCHAR(100)    ,
+	borough              VARCHAR(100)    ,
+	street               VARCHAR(100)    ,
+	zip                  VARCHAR(10)    ,
+	latitude             DECIMAL(30,12)    ,
+	longitude            DECIMAL(30,12)    ,
+	CONSTRAINT pk_dim_location PRIMARY KEY ( location_id )
  );
 
-ALTER TABLE `311_dw_lgl`.INSTANCE.dim_date ADD PRIMARY KEY ( date_id )  NOT ENFORCED;
-
-CREATE TABLE `311_dw_lgl`.INSTANCE.dim_location ( 
-	location_id int64 NOT NULL  ,
-	Location_Type string  ,
-	ZIP string  ,
-	Address string  ,
-	Street_Name string  ,
-	Cross_Street_1 string  ,
-	Cross_Street_2 string  ,
-	Intersection_Street_1 string  ,
-	Intersection_Street_2 string  ,
-	Address_Type string  ,
-	City string  ,
-	Landmark string  ,
-	Facility_Type string  ,
-	Community_Board string  ,
-	BBL string  ,
-	X_Coordinate_(State_Plane) string  ,
-	Y_Coordinate_(State_Plane) string  ,
-	Park_Facility_Name string  ,
-	Park_Borough string  ,
-	Bridge_Highway_Name string  ,
-	Bridge_Highway_Direction string  ,
-	Road_Ramp string  ,
-	Bridge_Highway_Segment string  ,
-	latitude bignumeric  ,
-	longitude bignumeric  ,
-	Location string  
+CREATE  TABLE "request311".fact_request ( 
+	fact_id               BIGINT  NOT NULL  ,
+	created_date_id     INT  NOT NULL  ,
+	closed_date_id       INT  NOT NULL  ,
+	agency_id            INT  NOT NULL  ,
+	complaint_id         INT  NOT NULL  ,
+	location_id          INT  NOT NULL  ,
+	channel_id           INT  NOT NULL  ,
+	date_diff            INT  NOT NULL  ,
+	CONSTRAINT pk PRIMARY KEY ( location_id, agency_id, complaint_id, channel_id, created__date_id, closed_date_id )
  );
-
-ALTER TABLE `311_dw_lgl`.INSTANCE.dim_location ADD PRIMARY KEY ( location_id )  NOT ENFORCED;
-
-CREATE TABLE `311_dw_lgl`.INSTANCE.fact_request ( 
-	factid int64 NOT NULL  ,
-	created__date date NOT NULL  ,
-	closed_date date NOT NULL  ,
-	Agency_ID int64 NOT NULL  ,
-	Complaint_ID int64 NOT NULL  ,
-	Status string  ,
-	Due_Date date NOT NULL  ,
-	location_id int64 NOT NULL  ,
-	Open_Data_Channel_Type_ID int64 NOT NULL  ,
-	Vehicle_ID int64 NOT NULL  
- );
-
-ALTER TABLE `311_dw_lgl`.INSTANCE.fact_request ADD PRIMARY KEY ( factid, location_id, Agency_ID, Complaint_ID, Open_Data_Channel_Type_ID, Vehicle_ID, created__date, closed_date, Due_Date )  NOT ENFORCED;

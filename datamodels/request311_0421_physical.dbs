@@ -3,31 +3,31 @@
 	<schema name="instance" catalogname="311_dw_lgl" >
 		<table name="dim_agency" >
 			<column name="agency_id" type="INT" jt="4" mandatory="y" />
-			<column name="agency" type="VARCHAR" length="10" jt="12" />
+			<column name="agency" type="varchar" length="10" jt="12" />
 			<index name="pk_dim_agency" unique="PRIMARY_KEY" >
 				<column name="agency_id" />
 			</index>
 		</table>
 		<table name="dim_channel" >
 			<column name="channel_id" type="INT" jt="4" mandatory="y" />
-			<column name="open_data_channel_type" type="VARCHAR" length="100" jt="12" />
+			<column name="open_data_channel_type" type="varchar" length="100" jt="12" />
 			<index name="pk_dim_open_data_channel_" unique="PRIMARY_KEY" >
 				<column name="channel_id" />
 			</index>
 		</table>
 		<table name="dim_complaint" >
 			<column name="complaint_id" type="INT" jt="4" mandatory="y" />
-			<column name="complaint_type" type="VARCHAR" length="255" jt="12" />
+			<column name="complaint_type" type="varchar" length="255" jt="12" />
 			<index name="pk_dim_complaint" unique="PRIMARY_KEY" >
 				<column name="complaint_id" />
 			</index>
 		</table>
 		<table name="dim_date" >
 			<column name="date_id" type="INT" jt="4" mandatory="y" />
-			<column name="date_iso_format" type="DATE" jt="91" />
-			<column name="year" type="INT" jt="4" />
-			<column name="month" type="INT" jt="4" />
-			<column name="day" type="INT" jt="4" />
+			<column name="date_iso_format" type="date" jt="91" />
+			<column name="year" type="date" jt="91" />
+			<column name="month" type="date" jt="91" />
+			<column name="day" type="date" jt="91" />
 			<column name="hour" type="INT" jt="4" />
 			<column name="minute" type="INT" jt="4" />
 			<index name="pk_dim_date" unique="PRIMARY_KEY" >
@@ -36,10 +36,10 @@
 		</table>
 		<table name="dim_location" >
 			<column name="location_id" type="INT" jt="4" mandatory="y" />
-			<column name="city" type="VARCHAR" length="100" jt="12" />
-			<column name="borough" type="VARCHAR" length="100" jt="12" />
-			<column name="street" type="VARCHAR" length="100" jt="12" />
-			<column name="zip" type="VARCHAR" length="10" jt="12" />
+			<column name="city" type="varchar" length="100" jt="12" />
+			<column name="borough" type="varchar" length="100" jt="12" />
+			<column name="street" type="varchar" length="100" jt="12" />
+			<column name="zip" type="varchar" length="10" jt="12" />
 			<column name="latitude" type="DOUBLE" jt="8" />
 			<column name="longitude" type="DOUBLE" jt="8" />
 			<index name="pk_dim_location" unique="PRIMARY_KEY" >
@@ -47,9 +47,9 @@
 			</index>
 		</table>
 		<table name="fact_request" >
-			<column name="factid" type="BIGINT" jt="-5" mandatory="y" />
-			<column name="created__date_id" prior="created _date_id" type="DATE" jt="91" mandatory="y" />
-			<column name="closed_date_id" type="DATE" jt="91" mandatory="y" />
+			<column name="factid" type="bigint" jt="-5" mandatory="y" />
+			<column name="created__date_id" prior="created _date_id" type="date" jt="91" mandatory="y" />
+			<column name="closed_date_id" type="date" jt="91" mandatory="y" />
 			<column name="agency_id" type="INT" jt="4" mandatory="y" />
 			<column name="complaint_id" type="INT" jt="4" mandatory="y" />
 			<column name="location_id" type="INT" jt="4" mandatory="y" />
@@ -121,8 +121,8 @@ CREATE  TABLE "instance".dim_complaint (
 CREATE  TABLE "instance".dim_date ( 
 	date_id              INT  NOT NULL  ,
 	date_iso_format      DATE    ,
-	"year"               INT    ,
-	"month"              INT    ,
+	"year"               DATE    ,
+	"month"              DATE    ,
 	"day"                INT    ,
 	"hour"               INT    ,
 	"minute"             INT    ,
@@ -150,8 +150,66 @@ CREATE  TABLE "instance".fact_request (
 	channel_id           INT  NOT NULL  ,
 	date_diff            INT  NOT NULL  ,
 	CONSTRAINT pk PRIMARY KEY ( location_id, agency_id, complaint_id, channel_id, created__date_id, closed_date_id )
+ );]]></string>
+		</script>
+		<script name="SQL_Editor_001" id="Editor-26e4" language="SQL" >
+			<string><![CDATA[CREATE SCHEMA IF NOT EXISTS "instance";
+
+CREATE  TABLE "instance".dim_agency ( 
+	agency_id            INT  NOT NULL  ,
+	agency               varchar(10)    ,
+	CONSTRAINT pk_dim_agency PRIMARY KEY ( agency_id )
+ );
+
+CREATE  TABLE "instance".dim_channel ( 
+	channel_id           INT  NOT NULL  ,
+	open_data_channel_type varchar(100)    ,
+	CONSTRAINT pk_dim_open_data_channel_ PRIMARY KEY ( channel_id )
+ );
+
+CREATE  TABLE "instance".dim_complaint ( 
+	complaint_id         INT  NOT NULL  ,
+	complaint_type       varchar(255)    ,
+	CONSTRAINT pk_dim_complaint PRIMARY KEY ( complaint_id )
+ );
+
+CREATE  TABLE "instance".dim_date ( 
+	date_id              INT  NOT NULL  ,
+	date_iso_format      date    ,
+	"year"               date    ,
+	"month"              date    ,
+	"day"                date    ,
+	"hour"               INT    ,
+	"minute"             INT    ,
+	CONSTRAINT pk_dim_date PRIMARY KEY ( date_id )
+ );
+
+CREATE  TABLE "instance".dim_location ( 
+	location_id          INT  NOT NULL  ,
+	city                 varchar(100)    ,
+	borough              varchar(100)    ,
+	street               varchar(100)    ,
+	zip                  varchar(10)    ,
+	latitude             DOUBLE    ,
+	longitude            DOUBLE    ,
+	CONSTRAINT pk_dim_location PRIMARY KEY ( location_id )
+ );
+
+CREATE  TABLE "instance".fact_request ( 
+	factid               bigint  NOT NULL  ,
+	created__date_id     date  NOT NULL  ,
+	closed_date_id       date  NOT NULL  ,
+	agency_id            INT  NOT NULL  ,
+	complaint_id         INT  NOT NULL  ,
+	location_id          INT  NOT NULL  ,
+	channel_id           INT  NOT NULL  ,
+	date_diff            INT  NOT NULL  ,
+	CONSTRAINT pk PRIMARY KEY ( location_id, agency_id, complaint_id, channel_id, created__date_id, closed_date_id )
  );
 ]]></string>
 		</script>
+		<browser id="Browse-23f1" name="hour" confirm_updates="y" >
+			<browse_table schema="311_dw_lgl.instance" entity="dim_date" x="20" y="20" width="270" height="240" />
+		</browser>
 	</layout>
 </project>

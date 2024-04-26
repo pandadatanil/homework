@@ -21,9 +21,9 @@ CREATE  TABLE "request311".dim_complaint (
 CREATE  TABLE "request311".dim_date ( 
 	date_id              INT  NOT NULL  ,
 	date_iso_format      DATE    ,
-	"year"               INT    ,
-	"month"              INT    ,
-	"day"                INT    ,
+	"year"               DATE    ,
+	"month"              DATE    ,
+	"day"                DATE    ,
 	"hour"               INT    ,
 	"minute"             INT    ,
 	CONSTRAINT pk_dim_date PRIMARY KEY ( date_id )

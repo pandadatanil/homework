@@ -26,3 +26,9 @@ blob_name = "homework1_311_20240420.csv"
 
 Azure Database for PostrgreSQL flexible server:
 https://portal.azure.com/?quickstart=true#@CUNY907.onmicrosoft.com/resource/subscriptions/1c37c168-9fab-4183-b89f-49bef5724bde/resourceGroups/rg-baruch-cis-dev/providers/Microsoft.DBforPostgreSQL/flexibleServers/cisdwbaruchhw/overview
+
+Tableau Link:
+https://public.tableau.com/app/profile/shanlinna/viz/homework9440/Dashboard
+
+
+

@@ -1,6 +1,5 @@
 this is tableau doc
-•	A Filtering tool by dimension
-•	A Pie Chart
-•	A Column Chart
-•	A Line Chart
-•	A Heat Map
+
+Tableau Link: 
+https://public.tableau.com/app/profile/shanlinna/viz/311request/Dashboard
+
